@@ -34,7 +34,7 @@ is_readable()
 {
     if [[ ! -f "$1" || ! -r "$1" ]]
     then
-        echo "File not found or readable: $1" 2>&1
+        echo -e "File not found or readable: $1\nExiting." 2>&1
         exit 1
     fi
 }
@@ -45,18 +45,24 @@ then
     exit 1
 fi
 
+echo "[*] Creating image..."
+
 for i in ${files[@]}
 do
     is_readable "$i"
-    #echo "$i: $(du -b "$i" | cut -f1)"
     let "sum += $(du -b "$i" | cut -f1)"
 done
 
 dd if=/dev/zero of=pad bs=1 count=$((102400 - sum)) 2>/dev/null
-#echo "pad: $(du -b pad | cut -f1)"
 
-echo "[*] Creating image ${@:$(($#))}..."
-#echo "cat "${files[@]}" pad "${@:1:$#-1}" > "${@:$(($#))}""
+for i in ${@:1:$#-1}
+do
+    size=$(du -b "$i" | cut -f1)
+    # Bash rounds down per default. Hack: n / k  ->  (n + (k-1) / k)
+    echo "    - include: $i (${size} bytes, $(((size + 511) / 512)) blocks)"
+done
+
+echo "[*] Image was written to: ${@:$(($#))}."
 cat "${files[@]}" pad "${@:1:$#-1}" > "${@:$(($#))}"
 
 rm pad
