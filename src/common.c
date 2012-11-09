@@ -27,19 +27,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <common.h>
 #include <stdint.h>
+#include <common.h>
 
 void outb(uint16_t port, uint8_t val)
 {
-    asm volatile ("outb %1, %0" : : "dN" (port), "a" (val));
+    __asm__ volatile ("outb %1, %0" : : "dN" (port), "a" (val));
 }
 
 uint8_t inb(uint16_t port)
 {
     uint8_t ret;
 
-    asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
+    __asm__ volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
 
     return ret;
 }
@@ -48,7 +48,7 @@ uint16_t inw(uint16_t port)
 {
     uint16_t ret;
 
-    asm volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
+    __asm__ volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
 
     return ret;
 }

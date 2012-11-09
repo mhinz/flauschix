@@ -42,5 +42,5 @@ kmain(void)
     kclrscr();
     kprintf("%s\n", "Welcome to AnathemOS!");
 
-    return 0;
+    return 0xdeadc0d3;
 }

@@ -9,7 +9,9 @@ IMAGE   = floppy.img
 SOURCES = \
 	  src/boot.asm \
 	  src/main.c \
-	  src/console.c
+	  src/console.c \
+	  src/string.c \
+	  src/common.c
 OBJ     = $(addsuffix .o,$(basename $(SOURCES)))
 
 $(IMAGE): $(KERNEL)
@@ -20,11 +22,11 @@ $(KERNEL): $(OBJ)
 	@ld $(LDFLAGS) -o $@ $^
 
 %.o: %.c
-	@echo '[*] Compiling C files...'
+	@echo '[*] Compiling C files... $^'
 	@$(CC) $(CFLAGS) -c -o $@ $^
 
 %.o: %.asm
-	@echo '[*] Compiling ASM files...'
+	@echo '[*] Compiling ASM files... $^'
 	@nasm $(ASFLAGS) -o $@ $^
 
 bochs:
