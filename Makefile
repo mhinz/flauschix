@@ -8,7 +8,8 @@ IMAGE   = floppy.img
 
 SOURCES = \
 	  src/boot.asm \
-	  src/main.c
+	  src/main.c \
+	  src/console.c
 OBJ     = $(addsuffix .o,$(basename $(SOURCES)))
 
 $(IMAGE): $(KERNEL)

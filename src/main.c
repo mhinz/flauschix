@@ -27,6 +27,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <console.h>
 #include <stdint.h>
 
 int
@@ -38,10 +39,8 @@ kmain(void)
          // shouldn't happen
     }
 
-    unsigned char *vram = (unsigned char *)0xb8000;
-
-    vram[0] = 0x41;
-    vram[1] = 0x07;
+    kclrscr();
+    kprintf("%s\n", "Welcome to AnathemOS!");
 
     return 0;
 }
