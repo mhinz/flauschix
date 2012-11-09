@@ -1,25 +1,35 @@
-CFLAGS  = -nostdlib -nostdinc -fno-builtin -fno-stack-protector
-LDFLAGS = -Tlink.ld
+CC      = gcc
+CFLAGS  = -Isrc -g -mtune=i586 -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
+LDFLAGS = -Tkernel.ld
 ASFLAGS = -felf
 
-KERNEL  = kernel
+KERNEL  = kernel.bin
 IMAGE   = floppy.img
 
-SOURCES = boot.o main.o
+SOURCES = \
+	  src/boot.asm \
+	  src/main.c
+OBJ     = $(addsuffix .o,$(basename $(SOURCES)))
 
-all: $(SRC) link
-	./boot/create-image.bash $(KERNEL) $(IMAGE)
+$(IMAGE): $(KERNEL)
+	@./boot/create-image.bash $^ $@
 
-link:
-	ld $(LDFLAGS) -o kernel $(SOURCES)
+$(KERNEL): $(OBJ)
+	@echo '[*] Linking objects into kernel ELF binary...'
+	@ld $(LDFLAGS) -o $@ $^
 
-.s.o:
-	nasm $(ASFLAGS) $<
+%.o: %.c
+	@echo '[*] Compiling C files...'
+	@$(CC) $(CFLAGS) -c -o $@ $^
 
-run:
-	bochs -f bochsrc
+%.o: %.asm
+	@echo '[*] Compiling ASM files...'
+	@nasm $(ASFLAGS) -o $@ $^
+
+bochs:
+	@LD_PRELOAD=/usr/lib/i386-linux-gnu/libXpm.so.4 bochs -f bochsrc
 
 clean:
-	rm *.o kernel
+	rm $(OBJ) $(KERNEL)
 
 .PHONY: clean run
