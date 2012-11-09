@@ -33,6 +33,6 @@ clean:
 	rm $(OBJ) $(KERNEL)
 
 mrproper: clean
-	rm $(IMAGE)
+	rm $(IMAGE) bochs.log
 
 .PHONY: clean bochs $(IMAGE)
