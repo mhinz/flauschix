@@ -32,4 +32,4 @@ bochs:
 clean:
 	rm $(OBJ) $(KERNEL)
 
-.PHONY: clean bochs
+.PHONY: clean bochs $(IMAGE)
