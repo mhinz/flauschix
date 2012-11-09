@@ -30,9 +30,9 @@ bochs:
 	@LD_PRELOAD=/usr/lib/i386-linux-gnu/libXpm.so.4 bochs -f bochsrc
 
 clean:
-	rm $(OBJ) $(KERNEL)
+	rm -f $(OBJ) $(KERNEL)
 
 mrproper: clean
-	rm $(IMAGE) bochs.log
+	rm -f $(IMAGE) bochs.log
 
 .PHONY: clean bochs $(IMAGE)
