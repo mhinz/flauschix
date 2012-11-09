@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Isrc -g -mtune=i586 -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
+CFLAGS  = -Isrc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
 LDFLAGS = -Tkernel.ld
 ASFLAGS = -felf
 
@@ -15,7 +15,7 @@ $(IMAGE): $(KERNEL)
 	@./boot/create-image.bash $^ $@
 
 $(KERNEL): $(OBJ)
-	@echo '[*] Linking objects into kernel ELF binary...'
+	@echo '[*] Linking object files into kernel ELF binary...'
 	@ld $(LDFLAGS) -o $@ $^
 
 %.o: %.c

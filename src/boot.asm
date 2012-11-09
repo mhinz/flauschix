@@ -26,13 +26,13 @@
 ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 ; POSSIBILITY OF SUCH DAMAGE.
 
-bits 32
+align 4
+
+extern kmain
 
 global loader
 global magic
 global mboot
-
-extern kmain
 
 MODULEALIGN equ  1<<0
 MEMINFO     equ  1<<1
@@ -40,21 +40,26 @@ FLAGS       equ  MODULEALIGN | MEMINFO
 MAGIC       equ  0x1BADB002
 CHECKSUM    equ -(MAGIC + FLAGS)
 
+STACKSIZE   equ 0x4000  ; 16k kernel stack
+
+
+section .bss
+
+stack: resb STACKSIZE
+magic: resd 1
+mboot: resd 1
+
 
 section .text
-align 4
 
     dd MAGIC
     dd FLAGS
     dd CHECKSUM
 
-; reserve initial kernel stack space
-STACKSIZE equ 0x4000  ; 16k
-
 loader:
-    mov     esp, stack + STACKSIZE  ; setup stack
+    mov     esp, stack + STACKSIZE  ; initialize stack pointer
     mov     [magic], eax
-    mov     [mbd], ebx
+    mov     [mboot], ebx
 
     call    kmain
     cli
@@ -62,11 +67,3 @@ loader:
 .hang:
     hlt
     jmp     .hang
-
-
-section .bss
-align 4
-
-stack: resb STACKSIZE  ; reserve 16k stack on dword boundary
-magic: resd 1
-mbd:   resd 1

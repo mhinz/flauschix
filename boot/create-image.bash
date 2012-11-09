@@ -48,13 +48,15 @@ fi
 for i in ${files[@]}
 do
     is_readable "$i"
+    #echo "$i: $(du -b "$i" | cut -f1)"
     let "sum += $(du -b "$i" | cut -f1)"
 done
 
 dd if=/dev/zero of=pad bs=1 count=$((102400 - sum)) 2>/dev/null
+#echo "pad: $(du -b pad | cut -f1)"
 
-#echo "[*] Creating image ${@:$(($#))}..."
-echo "cat "${files[@]}" pad "${@:1:$#-1}" > "${@:$(($#))}""
+echo "[*] Creating image ${@:$(($#))}..."
+#echo "cat "${files[@]}" pad "${@:1:$#-1}" > "${@:$(($#))}""
 cat "${files[@]}" pad "${@:1:$#-1}" > "${@:$(($#))}"
 
 rm pad
