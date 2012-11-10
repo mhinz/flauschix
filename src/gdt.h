@@ -24,20 +24,16 @@
  * 7:     G        granularity (0 = 1 byte, 1 = 1 kbyte)
  */
 
-struct gdt_entry {
+typedef struct {
     u16 limit_low;    // lower 16 bits of limit
     u16 base_low;     // lower 16 bits of base
     u8  base_middle;  // next 8 bits of base
     u8  access;       // access flags
     u8  granularity;  // granularity flags
     u8  base_high;    // upper 8 bits of base
-} __attribute__((packed));
+} __attribute__((packed)) gdt_entry_t;
 
-typedef struct gdt_entry gdt_entry_t;
-
-struct gdt_ptr {
+typedef struct {
     u16 limit;        // upper 16 bits of all selector limits
     u32 base;         // address of the first gdt_entry_t
-} __attribute__((packed));
-
-typedef struct gdt_ptr gdt_ptr_t;
+} __attribute__((packed)) gdt_ptr_t;
