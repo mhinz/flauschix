@@ -30,12 +30,14 @@
 #include <stdint.h>
 #include <common.h>
 
-void outb(u16 port, u8 val)
+void
+outb(u16 port, u8 val)
 {
     __asm__ volatile ("outb %1, %0" : : "dN" (port), "a" (val));
 }
 
-u8 inb(u16 port)
+u8
+inb(u16 port)
 {
     u8 ret;
 
@@ -44,7 +46,8 @@ u8 inb(u16 port)
     return ret;
 }
 
-u16 inw(u16 port)
+u16
+inw(u16 port)
 {
     u16 ret;
 
