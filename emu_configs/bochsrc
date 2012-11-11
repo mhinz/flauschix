@@ -1,5 +1,5 @@
 romimage:    file=/usr/share/bochs/BIOS-bochs-latest
-vgaromimage: file=boot/VGABIOS-elpin-2.40
+vgaromimage: file=emu_configs/VGABIOS-elpin-2.40
 
 cpu:         ips=500000
 megs:        32
@@ -11,7 +11,7 @@ floppy_bootsig_check: disabled=0
 
 mouse:       enabled=0
 
-log:         bochs.log
+log:         emu_configs/bochs.log
 error:       action=report
 info:        action=report
 panic:       action=ask

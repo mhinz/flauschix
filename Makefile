@@ -32,7 +32,10 @@ $(KERNEL): $(OBJ)
 	@nasm $(ASFLAGS) -o $@ $^
 
 bochs:
-	@LD_PRELOAD=/usr/lib/i386-linux-gnu/libXpm.so.4 bochs -f bochsrc
+	@LD_PRELOAD=/usr/lib/i386-linux-gnu/libXpm.so.4 bochs -f emu_configs/bochsrc
+
+qemu:
+	@qemu -D log/qemu.log -kernel $(KERNEL)
 
 clean:
 	rm -f $(OBJ) $(KERNEL)
@@ -40,4 +43,4 @@ clean:
 mrproper: clean
 	rm -f $(IMAGE) bochs.log
 
-.PHONY: clean bochs $(IMAGE)
+.PHONY: mrproper clean bochs qemu $(IMAGE)
