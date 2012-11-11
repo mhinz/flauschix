@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Isrc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
+CFLAGS  = -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
 LDFLAGS = -Tkernel.ld
 ASFLAGS = -felf
 
@@ -7,13 +7,13 @@ KERNEL  = kernel.bin
 IMAGE   = floppy.img
 
 SOURCES = \
-	  src/boot.asm      \
-	  src/common.c      \
-	  src/console.c     \
-	  src/gdt.c         \
-	  src/gdt_flush.asm \
-	  src/main.c        \
-	  src/string.c
+	  src/kernel/boot.asm      \
+	  src/kernel/common.c      \
+	  src/kernel/console.c     \
+	  src/kernel/gdt.c         \
+	  src/kernel/gdt_flush.asm \
+	  src/kernel/main.c        \
+	  src/libc/string.c
 OBJ     = $(addsuffix .o,$(basename $(SOURCES)))
 
 $(IMAGE): $(KERNEL)
