@@ -27,17 +27,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <console.h>
 #include <stdint.h>
+#include <gdt.h>
+#include <console.h>
 
 int
 kmain(void)
 {
-    extern uint32_t magic;
+    extern u32 magic;
 
     if (magic != 0x2badb002) {
          // shouldn't happen
     }
+
+    gdt_init();
 
     kclrscr();
     kprintf("%s\n", "Welcome to AnathemOS!");

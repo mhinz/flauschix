@@ -24,7 +24,7 @@ $(KERNEL): $(OBJ)
 	@ld $(LDFLAGS) -o $@ $^
 
 %.o: %.c
-	@echo '[*] Compiling C file... $^'
+	@echo '[*] Compiling C file..... $^'
 	@$(CC) $(CFLAGS) -c -o $@ $^
 
 %.o: %.asm

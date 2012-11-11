@@ -32,9 +32,9 @@
 #include <stdarg.h>
 
 static unsigned char *vram = (unsigned char *)0xb8000;
-static uint32_t ret = 0;
-static uint8_t x    = 0;
-static uint8_t y    = 0;
+static u32 ret = 0;
+static u8 x    = 0;
+static u8 y    = 0;
 
 
 static void
@@ -98,7 +98,7 @@ kclrscr(void)
     x = y = 0;
 }
 
-uint32_t
+u32
 kprintf(const char *fmt, ...)
 {
     const char *s;

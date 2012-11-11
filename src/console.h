@@ -3,4 +3,4 @@
 #include <stdint.h>
 
 void kclrscr(void);
-uint32_t kprintf(const char *fmt, ...);
+u32 kprintf(const char *fmt, ...);

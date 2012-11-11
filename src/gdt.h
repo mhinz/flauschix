@@ -37,3 +37,5 @@ typedef struct {
     u16 limit;        // upper 16 bits of all selector limits
     u32 base;         // address of the first gdt_entry_t
 } __attribute__((packed)) gdt_ptr_t;
+
+void gdt_init(void);
