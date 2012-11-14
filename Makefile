@@ -1,12 +1,12 @@
-CC      = gcc
-CFLAGS  = -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
-LDFLAGS = -Tkernel.ld
-ASFLAGS = -felf
+CC      := gcc
+CFLAGS  := -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
+LDFLAGS := -Tkernel.ld
+ASFLAGS := -felf
 
-KERNEL  = kernel.bin
-IMAGE   = floppy.img
+KERNEL  := kernel.bin
+IMAGE   := floppy.img
 
-SOURCES = \
+SOURCES := \
 	  src/kernel/boot.asm      \
 	  src/kernel/common.c      \
 	  src/kernel/console.c     \
@@ -14,7 +14,7 @@ SOURCES = \
 	  src/kernel/gdt_flush.asm \
 	  src/kernel/main.c        \
 	  src/libc/string.c
-OBJ     = $(addsuffix .o,$(basename $(SOURCES)))
+OBJ     := $(addsuffix .o,$(basename $(SOURCES)))
 
 $(IMAGE): $(KERNEL)
 	@./boot/create-image.bash $^ $@
