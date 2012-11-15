@@ -22,6 +22,8 @@
  * 7:     G        granularity (0 = 1 byte, 1 = 1 kbyte)
  */
 
+extern void gdt_flush(u32);
+
 typedef struct {
     u16 limit_low;    // lower 16 bits of limit
     u16 base_low;     // lower 16 bits of base
@@ -34,6 +36,6 @@ typedef struct {
 typedef struct {
     u16 limit;        // upper 16 bits of all selector limits
     u32 base;         // address of the first gdt_entry_t
-} __attribute__((packed)) gdt_ptr_t;
+} __attribute__((packed)) gdt_t;
 
 void gdt_init(void);
