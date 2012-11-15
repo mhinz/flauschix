@@ -29,24 +29,11 @@
 
 #include <stdint.h>
 #include <console.h>
-#include <gdt.h>
-#include <idt.h>
-#include <main.h>
+#include <interrupt.h>
 
-int
-kmain(void)
+void isr_handler(registers_t regs)
 {
-    if (magic != 0x2badb002) {
-         // shouldn't happen
-    }
-
-    gdt_init();
-    idt_init();
-
-    kclrscr();
-    kprintf("%s\n", "Welcome to AnathemOS!");
-
-    __asm__ volatile ("int $0x3");
-
-    return 0xab;
+    (void)regs;
+    /*kprintf("received interrupt: %d\n", regs.int_no);*/
+    kprintf("%s\n", "hallo");
 }
