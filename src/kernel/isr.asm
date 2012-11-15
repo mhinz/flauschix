@@ -5,7 +5,7 @@ extern isr_handler
     isr%1:
         cli
         push    byte 0    ; dummy error code
-        push    byte 0    ; interrupt number
+        push    byte %1   ; interrupt number
         jmp     isr_stub
 %endmacro
 
@@ -61,7 +61,9 @@ ISR_NOERR 31
 ;
 isr_stub:
     pusha               ; pushes edi, esi, ebp, esp, ebx, edx, ecx, eax
+
     mov     ax, ds
+    push    ax
 
     mov     ax, 0x10    ; load kernel data segment descriptor
     mov     ds, ax
