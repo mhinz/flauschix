@@ -30,6 +30,17 @@
 #include <string.h>
 #include <stddef.h>
 
+void *
+memset(void *s, int c, size_t n)
+{
+    unsigned char *pos = s;
+
+    while (n--)
+        *pos++ = (unsigned char)c;
+
+    return s;
+}
+
 size_t
 strlen(char *s)
 {
