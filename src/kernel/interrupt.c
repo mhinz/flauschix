@@ -33,7 +33,5 @@
 
 void isr_handler(registers_t regs)
 {
-    (void)regs;
-    /*kprintf("received interrupt: %d\n", regs.int_no);*/
-    kprintf("%s\n", "hallo");
+    kprintf("received interrupt: 0x%x\n", regs.int_no);
 }

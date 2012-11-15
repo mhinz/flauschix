@@ -63,7 +63,7 @@ isr_stub:
     pusha               ; pushes edi, esi, ebp, esp, ebx, edx, ecx, eax
 
     mov     ax, ds
-    push    ax
+    push    eax
 
     mov     ax, 0x10    ; load kernel data segment descriptor
     mov     ds, ax

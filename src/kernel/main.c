@@ -46,7 +46,9 @@ kmain(void)
     kclrscr();
     kprintf("%s\n", "Welcome to AnathemOS!");
 
+    __asm__ volatile ("int $0x0");
     __asm__ volatile ("int $0x3");
+    __asm__ volatile ("int $0x13");
 
     return 0xab;
 }
