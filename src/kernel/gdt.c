@@ -55,7 +55,7 @@ set_entry(u32 num, u32 base, u32 limit, u8 access, u8 gran)
     gdt_entries[num].granularity  = (limit >> 16) & 0x0f;
 
     /*
-     * gdt[num].granularity |= (gran & 0xf0);
+     * gdt_entries[num].granularity |= (gran & 0xf0);
      * Shut up, gcc -Wconversion.
      */
     gdt_entries[num].granularity  = (u8)(gdt_entries[num].granularity | (gran & 0xf0));
