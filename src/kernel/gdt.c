@@ -41,28 +41,32 @@ extern void gdt_flush(u32);
  *   - user code segment
  *   - user data segment
  */
-gdt_entry_t gdtt[5];
+gdt_entry_t gdt[5];
 gdt_ptr_t   gdtp;
 
 static void
 set_entry(u32 num, u32 base, u32 limit, u8 access, u8 gran)
 {
-    gdtt[num].base_low     = (base & 0xffff);
-    gdtt[num].base_middle  = (base >> 16) & 0xff;
-    gdtt[num].base_high    = (base >> 24) & 0xff;
+    gdt[num].base_low     = (base & 0xffff);
+    gdt[num].base_middle  = (base >> 16) & 0xff;
+    gdt[num].base_high    = (u8)(base >> 24) & 0xff;
 
-    gdtt[num].limit_low    = (limit & 0xffff);
-    gdtt[num].granularity  = (limit >> 16) & 0x0f;
+    gdt[num].limit_low    = (limit & 0xffff);
+    gdt[num].granularity  = (limit >> 16) & 0x0f;
 
-    gdtt[num].granularity |= gran & 0xf0;
-    gdtt[num].access       = access;
+    /*
+     * gdt[num].granularity |= (gran & 0xf0);
+     * Shut up, gcc -Wconversion.
+     */
+    gdt[num].granularity  = (u8)(gdt[num].granularity | (gran & 0xf0));
+    gdt[num].access       = access;
 }
 
 void
 gdt_init(void)
 {
     gdtp.limit = (sizeof (gdt_entry_t) * 5) - 1;
-    gdtp.base  = (u32)&gdtt;
+    gdtp.base  = (u32)&gdt;
 
     set_entry(0, 0, 0,          0,    0   );  // null segment
     set_entry(1, 0, 0xffffffff, 0x9a, 0xcf);  // kernel code segment

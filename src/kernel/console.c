@@ -27,14 +27,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <console.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <console.h>
 
 static unsigned char *vram = (unsigned char *)0xb8000;
 static u32 ret = 0;
-static u8 x    = 0;
-static u8 y    = 0;
+static u32 x   = 0;
+static u32 y   = 0;
 
 
 static void
@@ -54,7 +54,7 @@ kputc(const char c)
             vram[i] = 0;
     }
 
-    vram[2 * (y * 80 + x)]     = c;
+    vram[2 * (y * 80 + x)]     = (unsigned char)c;
     vram[2 * (y * 80 + x) + 1] = 0x07;
 
     x++;
@@ -69,22 +69,21 @@ kputs(const char *s)
 }
 
 static void
-kputn(size_t x, const int base)
+kputn(int n, const int base)
 {
-    const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
-    char buf[65];
-    char *p;
-
     if (base > 36)
         return;
 
-    p  = buf + 64;
+    const char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+    char buf[65];
+    char *p = buf + 64;
     *p = '\0';
 
     do {
-        *--p = digits[x % base];
-        x /= base;
-    } while (x);
+        *--p = digits[n % base];
+        n /= base;
+    } while (n);
 
     kputs(p);
 }
@@ -102,7 +101,7 @@ u32
 kprintf(const char *fmt, ...)
 {
     const char *s;
-    size_t n;
+    int n;
     va_list ap;
 
     va_start(ap, fmt);
@@ -114,17 +113,17 @@ kprintf(const char *fmt, ...)
 
             switch (*fmt) {
                 case 's':
-                    s = va_arg(ap, char*);
+                    s = va_arg(ap, char *);
                     kputs(s);
                     break;
                 case 'd':
                 case 'u':
-                    n = va_arg(ap, unsigned long int);
+                    n = va_arg(ap, int);
                     kputn(n, 10);
                     break;
                 case 'x':
                 case 'p':
-                    n = va_arg(ap, unsigned long int);
+                    n = va_arg(ap, int);
                     kputn(n, 16);
                     break;
                 case '%':

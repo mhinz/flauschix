@@ -2,7 +2,7 @@ CC      := gcc
 
 LDFLAGS := -Tkernel.ld
 ASFLAGS := -felf
-CFLAGS  := -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector
+CFLAGS  := -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes
 
 KERNEL  := kernel.bin
 IMAGE   := floppy.img

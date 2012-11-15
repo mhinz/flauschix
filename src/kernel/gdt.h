@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdint.h>
-
 /*
  * Wanna hear the the good or the bad message first?
  * Okay, the good one. Grub sets up the GDT for us! And the bad one, you ask?

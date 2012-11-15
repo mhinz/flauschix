@@ -28,14 +28,13 @@
  */
 
 #include <stdint.h>
-#include <gdt.h>
 #include <console.h>
+#include <gdt.h>
+#include <main.h>
 
 int
 kmain(void)
 {
-    extern u32 magic;
-
     if (magic != 0x2badb002) {
          // shouldn't happen
     }
@@ -45,5 +44,5 @@ kmain(void)
     kclrscr();
     kprintf("%s\n", "Welcome to AnathemOS!");
 
-    return 0xdeadc0d3;
+    return 0xab;
 }
