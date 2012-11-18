@@ -39,7 +39,7 @@ is_readable()
     fi
 }
 
-if [[ $# < 1 ]]
+if [[ $# -lt 1 ]]
 then
     echo "usage: $0 [optional files] <output file>"
     exit 1
