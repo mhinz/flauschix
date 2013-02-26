@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Marco Hinz
+ * Copyright (c) 2013 Marco Hinz
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,11 +28,28 @@
  */
 
 #include <stdint.h>
-#include <console.h>
+#include <common.h>
 #include <isr.h>
 
+isr_t interrupt_handlers[256];
+
 void
-isr_handler(registers_t regs)
+register_interrupt_handler(u8 n, isr_t handler)
 {
-    kprintf("received interrupt: 0x%x\n", regs.int_no);
+    interrupt_handlers[n] = handler;
+}
+
+void
+irq_handler(registers_t regs)
+{
+    if (regs.int_no >= 40) {
+        outb(0xa0, 0x20);  // send reset signal to slave
+    }
+
+    outb(0x20, 0x20);  // send reset signal to master
+
+    if (interrupt_handlers[regs.int_no] != 0) {
+        isr_t handler = interrupt_handlers[regs.int_no];
+        handler(regs);
+    }
 }

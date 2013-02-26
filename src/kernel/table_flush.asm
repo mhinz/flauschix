@@ -1,4 +1,5 @@
 global gdt_flush
+global idt_flush
 
 gdt_flush:
     mov     eax, [esp+4]  ; get pointer to GDT
@@ -13,4 +14,9 @@ gdt_flush:
     jmp     0x08:.flush   ; offset to our kernel code segment
 
 .flush:
+    ret
+
+idt_flush:
+    mov     eax, [esp+4]  ; get pointer to IDT
+    lidt    [eax]         ; load new IDT
     ret

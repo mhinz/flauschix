@@ -29,6 +29,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <common.h>
 #include <idt.h>
 
 idt_t       idt;
@@ -55,6 +56,18 @@ idt_init(void)
 
     memset(&idt_entries, 0, size);
 
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+    outb(0x21, 0x20);
+    outb(0xA1, 0x28);
+    outb(0x21, 0x04);
+    outb(0xA1, 0x02);
+    outb(0x21, 0x01);
+    outb(0xA1, 0x01);
+    outb(0x21, 0x0);
+    outb(0xA1, 0x0);
+
+    // CPU interrupts
     set_entry(0,  (u32)isr0,  0x08, 0x8e);
     set_entry(1,  (u32)isr1,  0x08, 0x8e);
     set_entry(2,  (u32)isr2,  0x08, 0x8e);
@@ -87,6 +100,23 @@ idt_init(void)
     set_entry(29, (u32)isr29, 0x08, 0x8e);
     set_entry(30, (u32)isr30, 0x08, 0x8e);
     set_entry(31, (u32)isr31, 0x08, 0x8e);
+    // IRQ
+    set_entry(32, (u32)irq0,  0x08, 0x8e);
+    set_entry(33, (u32)irq1,  0x08, 0x8e);
+    set_entry(34, (u32)irq2,  0x08, 0x8e);
+    set_entry(35, (u32)irq3,  0x08, 0x8e);
+    set_entry(36, (u32)irq4,  0x08, 0x8e);
+    set_entry(37, (u32)irq5,  0x08, 0x8e);
+    set_entry(38, (u32)irq6,  0x08, 0x8e);
+    set_entry(39, (u32)irq7,  0x08, 0x8e);
+    set_entry(40, (u32)irq8,  0x08, 0x8e);
+    set_entry(41, (u32)irq9,  0x08, 0x8e);
+    set_entry(42, (u32)irq10, 0x08, 0x8e);
+    set_entry(43, (u32)irq11, 0x08, 0x8e);
+    set_entry(44, (u32)irq12, 0x08, 0x8e);
+    set_entry(45, (u32)irq13, 0x08, 0x8e);
+    set_entry(46, (u32)irq14, 0x08, 0x8e);
+    set_entry(47, (u32)irq15, 0x08, 0x8e);
 
     idt_flush((u32)&idt);
 }
