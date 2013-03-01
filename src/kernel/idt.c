@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Marco Hinz
+ * Copyright (c) 2013 Marco Hinz
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ set_entry(u8 num, u32 base, u16 sel, u8 flags)
 {
     idt_entries[num].base_low  = (base & 0xffff);
     idt_entries[num].base_high = ((u16)(base >> 16) & 0xffff);
-
     idt_entries[num].selector  = sel;
     idt_entries[num].reserved  = 0;
     idt_entries[num].flags     = flags;  // flags | 0x60 for user-mode
@@ -56,16 +55,26 @@ idt_init(void)
 
     memset(&idt_entries, 0, size);
 
-    outb(0x20, 0x11);
-    outb(0xA0, 0x11);
-    outb(0x21, 0x20);
-    outb(0xA1, 0x28);
-    outb(0x21, 0x04);
-    outb(0xA1, 0x02);
-    outb(0x21, 0x01);
-    outb(0xA1, 0x01);
-    outb(0x21, 0x0);
-    outb(0xA1, 0x0);
+    /*
+     * remap IRQs
+     */
+
+    // start initialization sequence (cascade mode)
+    outb(PIC_MASTER_CMD,  0x11);
+    outb(PIC_SLAVE_CMD,   0x11);
+
+    outb(PIC_MASTER_DATA, 0x20);
+    outb(PIC_SLAVE_DATA,  0x28);
+    outb(PIC_MASTER_DATA, 0x04);
+    outb(PIC_SLAVE_DATA,  0x02);
+    outb(PIC_MASTER_DATA, 0x01);
+    outb(PIC_SLAVE_DATA,  0x01);
+    outb(PIC_MASTER_DATA, 0x0);
+    outb(PIC_SLAVE_DATA,  0x0);
+
+    /*
+     * set IDT entries
+     */
 
     // CPU interrupts
     set_entry(0,  (u32)isr0,  0x08, 0x8e);
@@ -100,7 +109,7 @@ idt_init(void)
     set_entry(29, (u32)isr29, 0x08, 0x8e);
     set_entry(30, (u32)isr30, 0x08, 0x8e);
     set_entry(31, (u32)isr31, 0x08, 0x8e);
-    // IRQ
+    // PIC interrupts
     set_entry(32, (u32)irq0,  0x08, 0x8e);
     set_entry(33, (u32)irq1,  0x08, 0x8e);
     set_entry(34, (u32)irq2,  0x08, 0x8e);
@@ -119,4 +128,6 @@ idt_init(void)
     set_entry(47, (u32)irq15, 0x08, 0x8e);
 
     idt_flush((u32)&idt);
+
+    __asm__ volatile ("sti");
 }

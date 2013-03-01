@@ -52,6 +52,11 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
+#define PIC_MASTER_CMD   0x20
+#define PIC_MASTER_DATA  0x21
+#define PIC_SLAVE_CMD    0xa0
+#define PIC_SLAVE_DATA   0xa1
+
 typedef struct {
     u16 base_low;   // lower 16 bits of address to jump to if this int fires
     u16 selector;   // kernel segment selector

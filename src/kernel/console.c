@@ -91,7 +91,7 @@ kputn(int n, const int base)
 void
 kclrscr(void)
 {
-    for (int i = 0; i < (2 * 25 * 80); i++)
+    for (int i = 0; i < (2 * 25 * 80); ++i)
         vram[i] = 0;
 
     x = y = 0;

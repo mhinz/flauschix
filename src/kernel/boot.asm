@@ -1,5 +1,5 @@
 
-; Copyright (c) 2012 Marco Hinz
+; Copyright (c) 2013 Marco Hinz
 ; All rights reserved.
 ;
 ; Redistribution and use in source and binary forms, with or without
@@ -61,9 +61,6 @@ loader:
     mov     [magic], eax
     mov     [mboot], ebx
 
-    call    kmain
     cli
-
-.hang:
-    hlt
-    jmp     .hang
+    call    kmain
+    jmp     $

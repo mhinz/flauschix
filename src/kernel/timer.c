@@ -28,30 +28,41 @@
  */
 
 #include <stdint.h>
+#include <common.h>
 #include <console.h>
-#include <gdt.h>
-#include <idt.h>
+#include <isr.h>
 #include <timer.h>
-#include <main.h>
 
-int
-kmain(void)
+u32 tick = 0;
+
+static void
+timer_callback(registers_t regs)
 {
-    if (magic != 0x2badb002) {
-         // shouldn't happen
-    }
+    (void)regs;
 
-    gdt_init();
-    idt_init();
+    if (tick == 4294967295)
+        tick = 0;
+    else
+        tick++;
 
-    kclrscr();
-    kprintf("%s\n", "Welcome to Flauschix!");
+    kprintf("Tick: %d\n", tick);
+}
 
-    timer_init(10);
+void
+timer_init(u32 frequency)
+{
+    register_interrupt_handler(IRQ0, &timer_callback);
 
-    __asm__ volatile ("int $0x0");
-    __asm__ volatile ("int $0x3");
-    __asm__ volatile ("int $0x13");
+    u32 divisor = 1193180 / frequency;
 
-    return 0xab;
+    // - send command byte and set PIT to repeating mode
+    // - tell that we want to set the divisor
+    outb(0x43, 0x36);
+
+    u8 l = (u8)(divisor & 0xff);
+    u8 h = (u8)((divisor >> 8) & 0xff);
+
+    // send frequency divisor
+    outb(0x40, l);
+    outb(0x40, h);
 }
