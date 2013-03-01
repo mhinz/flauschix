@@ -44,7 +44,7 @@ kmain(void)
     idt_init();
 
     kclrscr();
-    kprintf("%s\n", "Welcome to AnathemOS!");
+    kprintf("%s\n", "Welcome to Flauschix!");
 
     __asm__ volatile ("int $0x0");
     __asm__ volatile ("int $0x3");
