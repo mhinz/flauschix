@@ -44,14 +44,14 @@ kmain(void)
     gdt_init();
     idt_init();
 
-    kclrscr();
-    kprintf("%s\n", "Welcome to Flauschix!");
+    vga_clear_screen();
+    vga_printf("Welcome to Flauschix!\n");
+
+    /*__asm__ volatile ("int $0x0");*/
+    /*__asm__ volatile ("int $0x3");*/
+    /*__asm__ volatile ("int $0x13");*/
 
     timer_init(10);
-
-    __asm__ volatile ("int $0x0");
-    __asm__ volatile ("int $0x3");
-    __asm__ volatile ("int $0x13");
 
     return 0xab;
 }

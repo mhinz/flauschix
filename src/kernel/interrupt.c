@@ -34,5 +34,5 @@
 void
 isr_handler(registers_t regs)
 {
-    kprintf("received interrupt: 0x%x\n", regs.int_no);
+    vga_printf("received interrupt: 0x%x\n", regs.int_no);
 }

@@ -1,4 +1,4 @@
 #pragma once
 
-void kclrscr(void);
-u32 kprintf(const char *fmt, ...);
+void vga_clear_screen(void);
+u32 vga_printf(const char *fmt, ...);

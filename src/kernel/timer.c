@@ -45,7 +45,7 @@ timer_callback(registers_t regs)
     else
         tick++;
 
-    kprintf("Tick: %d\n", tick);
+    vga_printf("Tick: %d\n", tick);
 }
 
 void

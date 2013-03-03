@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 Marco Hinz
+ * Copyright (c) 2013 Marco Hinz
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,35 +30,71 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <console.h>
+/*#include <common.h>*/
 
-static unsigned char *vram = (unsigned char *)0xb8000;
-static u32 ret = 0;
-static u32 x   = 0;
-static u32 y   = 0;
+/*
+ * See docs/vga.txt for more detailed information
+ * about how we access the VGA hardware.
+ */
 
+static u8 *vram = (u8 *)0xb8000;
+static u32 ret  = 0;
+static u8 x     = 0;
+static u8 y     = 0;
+
+
+/*static void*/
+/*cursor_move(void)*/
+/*{*/
+    /*u16 pos = (u16)(y * 80 + x);*/
+
+    /*outb(0x3d4, 14);*/
+    /*outb(0x3d5, (u8)(pos >> 8));*/
+    /*outb(0x3d4, 15);*/
+    /*outb(0x3d5, (u8)pos);*/
+/*}*/
 
 static void
 kputc(const char c)
 {
-    if ((c == '\n') || (x > 79)) {
+    if (x >= 80) {
+        ++y;
         x = 0;
-        y++;
+    }
+    else {
+        switch (c) {
+            case '\n':
+                ++y;
+            case '\r':
+                x = 0;
+                goto end;
+            case '\b':
+                if (x)
+                    --x;
+                goto end;
+            case '\t':
+                x = (u8)((x + 8) & ~(8 - 1));
+                goto end;
+        }
     }
 
-    if (y > 24) {
+    // scroll by one line if needed
+    if (y >= 25) {
         int i = 0;
-
-        for (; i < (2 * 24 * 80); i++)
+        for (; i < (2 * 24 * 80); ++i)
             vram[i] = vram[i + 160];
-        for (; i < (2 * 25 * 80); i++)
+        for (; i < (2 * 25 * 80); ++i)
             vram[i] = 0;
+        y = 24;
     }
 
-    vram[2 * (y * 80 + x)]     = (unsigned char)c;
-    vram[2 * (y * 80 + x) + 1] = 0x07;
+    u16 off       = (u16)(2 * (y * 80 + x));
+    vram[off]     = (u8)c;
+    vram[off + 1] = (0 << 4) | (15 & 0x0f);
 
-    x++;
-    ret++;
+    ++x;
+end:
+    ++ret;
 }
 
 static void
@@ -89,7 +125,7 @@ kputn(int n, const int base)
 }
 
 void
-kclrscr(void)
+vga_clear_screen(void)
 {
     for (int i = 0; i < (2 * 25 * 80); ++i)
         vram[i] = 0;
@@ -98,7 +134,7 @@ kclrscr(void)
 }
 
 u32
-kprintf(const char *fmt, ...)
+vga_printf(const char *fmt, ...)
 {
     const char *s;
     int n;
@@ -109,7 +145,7 @@ kprintf(const char *fmt, ...)
 
     while (*fmt) {
         if (*fmt == '%') {
-            fmt++;
+            ++fmt;
 
             switch (*fmt) {
                 case 's':
@@ -132,14 +168,13 @@ kprintf(const char *fmt, ...)
                 case '\0':
                     goto out;
                 default:
-                    kputc('%');
                     kputc(*fmt);
                     break;
             }
         }
         else
             kputc(*fmt);
-        fmt++;
+        ++fmt;
     }
 
 out:
