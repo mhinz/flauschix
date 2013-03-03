@@ -1,9 +1,9 @@
 CC      := gcc
 
-LDFLAGS := -Tkernel.ld
+LDFLAGS := -Tkernel.ld -melf_i386
 ASFLAGS := -felf
 #CFLAGS  := -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes
-CFLAGS  := -Isrc/kernel -Isrc/libc -g -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion
+CFLAGS  := -Isrc/kernel -Isrc/libc -g -m32 -std=c99 -pedantic -Wall -Wextra -Werror -nostdlib -nostdinc -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion
 
 KERNEL  := kernel.bin
 IMAGE   := floppy.img
@@ -30,7 +30,7 @@ bochs:
 	@LD_PRELOAD=/usr/lib/i386-linux-gnu/libXpm.so.4 bochs -f emu_configs/bochsrc
 
 qemu:
-	@qemu -D log/qemu.log -kernel $(KERNEL)
+	@qemu -kernel $(KERNEL)
 
 clean:
 	rm -f $(OBJ) $(KERNEL)
