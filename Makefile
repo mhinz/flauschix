@@ -12,7 +12,7 @@ SRC     := $(shell find src -type f -name '*.c' -o -name '*.asm')
 OBJ     := $(addsuffix .o,$(basename $(SRC)))
 
 $(IMAGE): $(KERNEL)
-	@./boot/create-image.bash $^ $@
+	@./boot/create-image.sh $^ $@
 
 $(KERNEL): $(OBJ)
 	@echo '[*] Linking object files into kernel ELF binary...'
