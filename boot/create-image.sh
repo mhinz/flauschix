@@ -43,13 +43,13 @@ dd if=/dev/zero of="$1" bs=1 count=$((102400+$ofsum)) 2> /dev/null
 seek=0
 for i in $files
 do
-	dd conv=notrunc if=$i of="$1" seek="$seek" 2> /dev/null
+	dd conv=notrunc if=$i of="$1" seek="$seek" bs=1 2> /dev/null
 	seek=$(($seek+$(wc -c $i | cut -d ' ' -f 1)))
 done
 
 seek=102400
 for i in $ofiles
 do
-	dd conv=notrunc if=$i of="$1" seek="$seek" 2> /dev/null
+	dd conv=notrunc if=$i of="$1" seek="$seek" bs=1 2> /dev/null
 	seek=$(($seek+$(wc -c $i | cut -d ' ' -f 1)))
 done
